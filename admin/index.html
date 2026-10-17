@@ -440,7 +440,7 @@ const S = {
   orders: ORDERS.map(o=>({...o, items:o.items.map(i=>({...i}))})),
   payouts: PAYOUTS.map(x=>({...x})),
   filter: {cat:'All', q:''},
-  checkout: {method:'pickup', pickup:PICKUPS[0], region:'Metro Manila', pay:'GCash', proof:null},
+  checkout: {method:'pickup', pickup:PICKUPS[0], region:'Metro Manila', pay:'GCash', proof:null, name:'', phone:'', addr:''},
   lastOrder: null,
   auth: null,              // null = not signed in; 'admin' | vendor id once signed in
   role: 'admin',           // 'admin' | vendor id
@@ -480,6 +480,10 @@ const vendorPaid = vid => S.payouts.filter(x=>x.v===vid).reduce((t,x)=>t+x.amt,0
 const vendorOwed = vid => vendorEarned(vid)-vendorPaid(vid);
 const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'producer';
 const initials = s => s.split(/\s+/).filter(w=>/^[a-z]/i.test(w)).slice(0,2).map(w=>w[0].toUpperCase()).join('') || 'PR';
+const digits = s => String(s||'').replace(/\D/g,'');
+const validPhone = s => { const d=digits(s); return (d.length===11&&d.startsWith('09'))||(d.length===12&&d.startsWith('639')); };
+const samePhone = (a,b) => digits(a).slice(-10)===digits(b).slice(-10) && digits(a).length>=10;
+const canPlace = (c,pickupOnly) => !!c.proof && !!c.name.trim() && validPhone(c.phone) && !(c.method==='ship'&&(pickupOnly||!c.addr.trim()));
 const cartCount = ()=> S.cart.reduce((t,i)=>t+i.q,0);
 const cartSub = ()=> S.cart.reduce((t,i)=>t+P(i.id).price*i.q,0);
 const baseUrl = ()=> location.href.split('#')[0];
@@ -526,6 +530,7 @@ function route(){
   else if(h==='cart') view.innerHTML=vCart();
   else if(h==='checkout') view.innerHTML=vCheckout();
   else if(r==='order') view.innerHTML=vOrder(id);
+  else if(h==='track') view.innerHTML=vTrack();
   else view.innerHTML=vHome();
   after(h);
   const cc=$('#cartcnt'); if(cc) cc.textContent=cartCount();
@@ -629,14 +634,14 @@ function vCheckout(){
   const fee = c.method==='ship' ? SHIPFEE[c.region] : 0; const total=cartSub()+fee;
   return `<div class="steps"><a href="#cart">Cart</a><i>/</i><b>Checkout</b><i>/</i><span>Order QR</span></div>
   <div class="two"><div style="display:grid;gap:16px;min-width:0">
-    <div class="panel"><h3>1 · Your details</h3><div class="fr"><div class="field"><label for="f-name">Full name</label><input id="f-name" value="Paolo Reyes"></div><div class="field"><label for="f-phone">Mobile number</label><input id="f-phone" value="0917 222 0106"></div></div></div>
+    <div class="panel"><h3>1 · Your details</h3><div class="fr"><div class="field"><label for="f-name">Full name</label><input id="f-name" value="${esc(c.name)}" placeholder="Juan dela Cruz" autocomplete="name"></div><div class="field"><label for="f-phone">Mobile number</label><input id="f-phone" value="${esc(c.phone)}" placeholder="09XX XXX XXXX" inputmode="tel" autocomplete="tel"><span class="small muted">We text your order code and updates to this number. It is only used for this order.</span></div></div><div id="phonenote">${c.phone&&!validPhone(c.phone)?'<div class="note">Please enter a Philippine mobile number, like 0917 123 4567.</div>':''}</div></div>
     <div class="panel"><h3>2 · How do you want to get it?</h3>
       <div class="seg">
         <label class="${c.method==='pickup'?'on':''}"><input type="radio" name="m" value="pickup" ${c.method==='pickup'?'checked':''}><b>Pickup</b><span>Free. Show your order QR.</span></label>
         <label class="${c.method==='ship'?'on':''} ${pickupOnly?'':''}"><input type="radio" name="m" value="ship" ${c.method==='ship'?'checked':''}><b>Ship via J&amp;T</b><span>${pickupOnly?'Some items are pickup only':needsLocal?'Fresh items: Davao City only':'₱120 to ₱210 by region'}</span></label>
       </div>
       ${c.method==='pickup'?`<div class="field"><label for="f-pickup">Pickup point</label><select id="f-pickup">${PICKUPS.map(x=>`<option ${c.pickup===x?'selected':''}>${esc(x)}</option>`).join('')}</select></div>`
-      :`<div class="fr"><div class="field"><label for="f-region">Region</label><select id="f-region">${Object.keys(SHIPFEE).map(r=>`<option ${c.region===r?'selected':''}>${r}</option>`).join('')}</select></div><div class="field"><label for="f-addr">Address</label><input id="f-addr" placeholder="Street, barangay, city" value="12 Mabini St, Brgy. Kapitolyo, Pasig"></div></div>
+      :`<div class="fr"><div class="field"><label for="f-region">Region</label><select id="f-region">${Object.keys(SHIPFEE).map(r=>`<option ${c.region===r?'selected':''}>${r}</option>`).join('')}</select></div><div class="field"><label for="f-addr">Address</label><input id="f-addr" placeholder="House no., street, barangay, city" value="${esc(c.addr)}"></div></div>
       ${pickupOnly?'<div class="note">Your cart has a pickup-only item (cheesecake). Remove it or choose pickup.</div>':needsLocal&&c.region!=='Mindanao'?'<div class="note">Fresh durian and frozen pulp only ship inside Davao City. Choose Mindanao and a Davao City address, or pick up.</div>':''}`}
     </div>
     <div class="panel"><h3>3 · Pay the total by QR</h3>
@@ -653,13 +658,13 @@ function vCheckout(){
   </div>
   <div class="panel sticky"><h3>Order summary</h3><div class="sum">${S.cart.map(i=>{const p=P(i.id);return `<div><span>${i.q} × ${esc(p.name)}</span><span class="num">${peso(p.price*i.q)}</span></div>`}).join('')}
     <div><span>${c.method==='ship'?'Shipping · '+c.region:'Pickup'}</span><span class="num">${fee?peso(fee):'Free'}</span></div><div class="tot"><span>Total to pay</span><span class="num">${peso(total)}</span></div></div>
-    <button class="btn pri" id="place" type="button" style="justify-content:center" ${(!c.proof||(c.method==='ship'&&pickupOnly))?'disabled':''}>Place order</button>
-    <span class="small muted">${c.proof?'Your order is held until the producer confirms the payment, usually within the day.':'Upload the screenshot to place the order.'}</span></div></div>`;
+    <button class="btn pri" id="place" type="button" style="justify-content:center" ${(!canPlace(c,pickupOnly))?'disabled':''}>Place order</button>
+    <span class="small muted">${canPlace(c,pickupOnly)?'Your order is held until the producer confirms the payment, usually within the day.':!c.name.trim()||!validPhone(c.phone)?'Enter your name and mobile number to continue.':c.method==='ship'&&!c.addr.trim()?'Enter your delivery address.':c.method==='ship'&&pickupOnly?'Remove the pickup-only item or choose pickup.':'Upload the payment screenshot to place the order.'}</span></div></div>`;
 }
 function placeOrder(){
   const c=S.checkout; const fee=c.method==='ship'?SHIPFEE[c.region]:0;
-  const o={code:'DL-'+(S.seq++), when:'Just now', buyer:$('#f-name').value||'Guest', phone:$('#f-phone').value||'', method:c.method,
-    dest:c.method==='ship'?($('#f-addr')?.value||'')+' ('+c.region+')':c.pickup, fee, pay:c.pay, status:'pending', items:S.cart.map(i=>({...i})), proof:c.proof, placed:Date.now()};
+  const o={code:'DL-'+(S.seq++), when:'Just now', buyer:c.name.trim()||'Guest', phone:c.phone.trim(), method:c.method,
+    dest:c.method==='ship'?c.addr.trim()+' ('+c.region+')':c.pickup, fee, pay:c.pay, status:'pending', items:S.cart.map(i=>({...i})), proof:c.proof, placed:Date.now()};
   o.items.forEach(i=>{ P(i.id).stock=Math.max(0,P(i.id).stock-i.q); });
   S.orders.unshift(o); S.lastOrder=o; S.cart=[]; saveCart(); S.checkout.proof=null; save();
   location.hash='order-'+o.code;
@@ -676,7 +681,8 @@ function vOrder(code){
     <p class="muted">${o.status==='rejected'?`${esc(o.reason||'The screenshot amount did not match the total.')} Message the store below and we will sort it out.`:o.method==='pickup'?`Show this QR at <b>${esc(o.dest)}</b>. The producer scans it, hands over your items, and the order closes.`:`Ships via J&amp;T to <b>${esc(o.dest)}</b> once payment is confirmed.${o.tracking?' Tracking: <code>'+esc(o.tracking)+'</code>':' You will get the tracking number by SMS.'}`}</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${pillStatus(o.status)}<span class="small muted">${o.pay} · ${peso(orderTotal(o))}</span></div>
     <div class="timeline">${steps.map((s,i)=>`<div class="${i<idx?'done':i===idx?'now':'todo'}"><span class="d"></span><span>${s}</span></div>`).join('')}</div>
-    <div class="btns"><a class="btn" href="#shop">Back to shop</a></div></div></div>
+    ${o.phone?`<p class="small muted">We also texted this order code and link to <b>${esc(o.phone)}</b>. <span class="muted">(Sample store: no real SMS is sent.)</span></p>`:''}
+    <div class="btns"><a class="btn" href="#shop">Back to shop</a><a class="btn ghost" href="#track">Track order</a></div></div></div>
   <div class="two">
     <div class="panel"><h3>Track this order</h3><p class="small muted">Save this link. Open it any time to see if your payment is confirmed or your parcel has shipped.</p><div class="copyrow"><code style="word-break:break-all;font-size:13px">${esc(track)}</code><button class="btn sm" type="button" data-copy="${esc(track)}">Copy link</button></div></div>
     <div class="panel"><h3>Message the store</h3><p class="small muted">Questions about your order? Send the order code <b>${o.code}</b> with your message.</p>
@@ -688,6 +694,21 @@ function vOrder(code){
   <div class="panel"><h3>Items</h3><div class="sum">${o.items.map(i=>`<div><span>${i.q} × ${esc(P(i.id)?.name||i.id)}</span><span class="num">${peso((P(i.id)?.price||0)*i.q)}</span></div>`).join('')}<div><span>${o.method==='ship'?'Shipping':'Pickup'}</span><span class="num">${o.fee?peso(o.fee):'Free'}</span></div><div class="tot"><span>Total</span><span class="num">${peso(orderTotal(o))}</span></div></div></div>`;
 }
 
+function orderCard(o){ const first=o.items[0]&&P(o.items[0].id); const more=o.items.length-1;
+  return `<a class="vendorbox" href="#order-${o.code}" style="text-decoration:none"><span class="avatar" style="background:var(--surface-2);color:var(--fg);font-size:12px">${o.code.slice(3)}</span><div style="min-width:0"><b>${o.code}</b> · ${esc(o.buyer)}<div class="small muted">${first?esc(first.name.split(' (')[0]):''}${more>0?' +'+more+' more':''} · ${peso(orderTotal(o))} · ${esc(o.when)}</div></div><span style="margin-left:auto">${pillStatus(o.status)}</span></a>`; }
+function vTrack(){
+  const q=(S.trackQ||'').trim(); let found=[];
+  if(q){ const code=q.toUpperCase().replace(/\s+/g,''); found=S.orders.filter(o=>o.code===code||(digits(q).length>=10&&samePhone(o.phone,q))); }
+  const mine=S.orders.filter(o=>o.placed).sort((a,b)=>b.placed-a.placed);
+  return `<div class="sechead"><div><h2>Track your order</h2><p>Type your order code (like DL-1041) or the mobile number you used at checkout.</p></div></div>
+  <div class="two"><div style="display:grid;gap:16px;min-width:0">
+    <div class="panel"><div class="field"><label for="trackq">Order code or mobile number</label><div style="display:flex;gap:8px"><input id="trackq" value="${esc(S.trackQ||'')}" placeholder="DL-1041 or 0917 123 4567" style="flex:1;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 12px"><button class="btn pri" id="trackbtn" type="button">Find</button></div></div>
+      ${q?(found.length?`<div style="display:grid;gap:8px">${found.map(orderCard).join('')}</div>`:`<div class="note">No order found for “${esc(q)}”. Check the code on your order QR, or try the mobile number you typed at checkout.</div>`):''}
+      <span class="small muted">Lost the code too? Message the store with your name and the day you ordered: Messenger ${STORE_CONTACT.messenger} · ${STORE_CONTACT.phone}.</span></div>
+    ${mine.length?`<div class="panel"><h3>Orders placed on this phone</h3><div style="display:grid;gap:8px">${mine.map(orderCard).join('')}</div><span class="small muted">Remembered by this phone's browser. In the real store you see this list after a one-time SMS code.</span></div>`:''}
+  </div>
+  <div class="panel"><h3>How tracking works</h3><p class="small">After checkout we text the order code and a tracking link to your mobile number. You can also come back to this page any time and type the code or your number.</p><p class="small muted">Sample store: no real SMS is sent in this demo.</p></div></div>`;
+}
 // ---------- Dashboard ----------
 function myOrders(){ return S.role==='admin' ? S.orders : S.orders.filter(o=>o.items.some(i=>P(i.id).v===S.role)); }
 function myProducts(){ return S.role==='admin' ? S.products : S.products.filter(p=>p.v===S.role); }
@@ -886,6 +907,7 @@ function after(h){
   const view=$('#view');
   $$('[data-copy]').forEach(b=>b.onclick=()=>{ const t=b.dataset.copy; (navigator.clipboard?.writeText(t)||Promise.reject()).then(()=>toast('Copied')).catch(()=>{ const r=document.createRange(); const c=b.parentElement.querySelector('code'); if(c){ r.selectNodeContents(c); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); } toast(t); }); });
   if(h==='producers'){ wireVendorForm('apply'); }
+  if(h==='track'){ const go=()=>{ S.trackQ=$('#trackq').value; route(); const t=$('#trackq'); if(t){ t.focus(); t.setSelectionRange(t.value.length,t.value.length); } }; $('#trackbtn').onclick=go; $('#trackq').onkeydown=e=>{ if(e.key==='Enter') go(); }; }
   if(h==='shop'){ $('#shopq').oninput=e=>{S.filter.q=e.target.value; const pos=e.target.selectionStart; route(); const q=$('#shopq'); q.focus(); q.setSelectionRange(pos,pos);}; $$('[data-cat]').forEach(b=>b.onclick=()=>{S.filter.cat=b.dataset.cat; route();}); }
   if(h.startsWith('p-')){ const p=P(h.slice(2)); const inp=$('#pq');
     $$('[data-q]').forEach(b=>b.onclick=()=>{ inp.value=Math.min(p.stock,Math.max(1,(+inp.value||1)+(+b.dataset.q))); });
@@ -898,6 +920,8 @@ function after(h){
     $$('[data-pay]').forEach(b=>b.onclick=()=>{c.pay=b.dataset.pay; route();});
     $('#f-proof').onchange=e=>{ const f=e.target.files[0]; if(!f) return; shrink(f, d=>{ c.proof=d; route(); }); };
     $('#useSample').onclick=()=>{ c.proof=sampleProof(total,c.pay); route(); };
+    const pickupOnly=S.cart.some(i=>P(i.id).ship==='pickup');
+    ['name','phone','addr'].forEach(k=>{ const el=$('#f-'+k); if(!el) return; el.oninput=()=>{ c[k]=el.value; const pl=$('#place'); if(pl) pl.disabled=!canPlace(c,pickupOnly); }; el.onblur=()=>{ if(k==='phone'){ const n=$('#phonenote'); if(n) n.innerHTML=c.phone&&!validPhone(c.phone)?'<div class="note">Please enter a Philippine mobile number, like 0917 123 4567.</div>':''; } }; });
     const pl=$('#place'); if(pl) pl.onclick=placeOrder; }
   if(h.startsWith('order')){ const el=$('#orderqr'); const code=h.slice(6); const o=(code&&S.orders.find(x=>x.code===code.toUpperCase()))||S.lastOrder; if(el&&o) qr(el, `DURIANLANE|${o.code}|${orderTotal(o)}`, 150); }
   if(h==='dash'){
@@ -954,6 +978,7 @@ function reply(t){
   if(has('sell','vendor','producer','join','apply','magbenta')) return `Producers can apply right on the site: go to <a href="#producers">Producers</a> and fill in the short form (name, what you make, a photo, your GCash or Maya number). The store admin reviews it, and once approved you get your own login to add products and manage stock. Payouts are sent every Friday.`;
   if(has('payout','bayaran','hatian','commission','share','owed')) return `Buyers pay the store's own GCash or Maya QR. Every Friday the admin sends each producer their confirmed sales for the week, with the reference number logged in the dashboard. No commission is taken by the website.`;
   if(has('season','when','kailan','august')) return `Durian season in Davao runs August to October. Mangosteen is done for the year. Off-season, Tatay Ben sells frozen pulp and pomelo.`;
+  if(has('track','where is my order','status','nasaan','asan na')) return `Open <a href=\"#track\">Track order</a> and type your order code or the mobile number you used at checkout. We also text the code to that number after you order.`;
   if(has('thank','salamat')) return `Walang anuman! Enjoy the durian.`;
   return `I can answer about shipping, pickup, payment, stock, and which durian products to pick. Try "pasalubong under 500" or "do you ship to Cebu".`;
 }
