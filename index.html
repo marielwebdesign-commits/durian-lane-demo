@@ -53,6 +53,11 @@ img,svg{max-width:100%}
 .demobar .sp{flex:1}
 .demobar button{background:transparent;border:1px solid rgba(255,255,255,.3);color:inherit;border-radius:999px;padding:3px 10px;font-size:12px}
 .demobar button.on{background:#F4E7C8;color:var(--accent-ink);border-color:#F4E7C8}
+.demobar .dblink{color:#F4E7C8;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:3px 10px}
+.hdr.admin{background:var(--accent-ink);color:#F4ECD8;border-bottom-color:transparent}
+.hdr.admin .logo .mark{background:var(--accent);color:var(--accent-ink)}
+.hdr.admin .logo small{color:#C9B98F}
+.hdr.admin .muted{color:#C9B98F}
 
 /* header */
 .hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
@@ -79,7 +84,7 @@ main{padding-block:28px 60px}
 .hero .art svg{width:min(100%,300px);height:auto}
 @media (max-width:760px){ .hero{grid-template-columns:1fr} .hero .copy{padding:26px 20px} .hero .art{min-height:200px} }
 .btns{display:flex;gap:10px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 18px;font-weight:600;text-decoration:none;font-size:14.5px}
+.btn{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 18px;font-weight:600;text-decoration:none;font-size:14.5px}
 .btn.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .btn.grn{background:var(--green);color:#F4E7C8;border-color:var(--green)}
 .btn.sm{padding:6px 12px;font-size:13px}
@@ -103,6 +108,8 @@ main{padding-block:28px 60px}
 .card .ph{aspect-ratio:1/1;max-width:100%;display:grid;place-items:center;position:relative;background:var(--surface-2)}
 .card .ph svg{width:62%;height:auto}
 .card .ph .pill{position:absolute;top:10px;left:10px}
+.card .ph,.pdp .ph,.citem .ph{overflow:hidden}
+.ph>img{width:100%;height:100%;object-fit:cover}
 .card .body{padding:12px 14px 14px;display:grid;gap:4px}
 .card .vend{font-size:12px;color:var(--muted)}
 .card .name{font-weight:600;font-size:15px;line-height:1.3}
@@ -226,6 +233,7 @@ main{padding-block:28px 60px}
 .tbl th{text-align:left;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
 .tbl td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
 .tbl tr:last-child td{border-bottom:0}
+.tbl td.num{white-space:nowrap}
 .tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
 .tbl .acts{display:flex;gap:6px;flex-wrap:wrap}
 .tbl input.stk{width:70px;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:6px 8px;text-align:right}
@@ -281,12 +289,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .empty{padding:40px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:var(--radius);display:grid;gap:10px;justify-items:center}
 </style></head><body>
 <div class="demobar"><div class="wrap">
-  <span class="tag">Sample demo</span>
-  <span class="desc">Durian Lane Davao, a shared store for 4 small producers. Sample products and orders.</span>
-  <span class="sp"></span>
-  <button type="button" data-go="home" class="on" id="db-store">Storefront</button>
-  <button type="button" data-go="dash" id="db-dash">Dashboard</button>
-  <button type="button" data-go="qr" id="db-qr">QR kit</button>
+  <span class="tag">Sample store</span>
+  <span class="desc">Durian Lane Davao is a demo. Products, producers and orders are sample data; no real payments are taken.</span>
 </div></div>
 
 <header class="hdr"><div class="wrap">
@@ -296,8 +300,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   <nav class="nav" id="nav">
     <a href="#shop" data-r="shop">Shop</a>
     <a href="#producers" data-r="producers">Producers</a>
-    <a href="#qr" data-r="qr">QR kit</a>
-    <a href="#dash" data-r="dash">Dashboard</a>
   </nav>
   <button class="cartbtn" type="button" id="cartbtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 8h-12z"/><path d="M6 6L5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg><span class="lbl">Cart</span><span class="cnt" id="cartcnt">0</span></button>
 </div></header>
@@ -306,7 +308,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
 <footer><div class="wrap">
   <span>Durian Lane Davao · Calinan, Toril, Marilog and Buhangin producers</span>
-  <span>Sample store. Products, producers and orders are demo data.</span>
+  <span>Questions? Messenger m.me/durianlanedavao · 0917 555 0100</span>
 </div></footer>
 
 <button class="chatfab" type="button" id="chatfab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.5 7.2L4 21l1.8-5.5A8 8 0 1 1 21 12z"/></svg>Ask Durian Lane</button>
@@ -318,6 +320,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 </div>
 <div id="modalroot"></div>
 <div id="toastroot"></div>
+<script>window.DL_MODE='store';</script>
 <script>
 // ---------- Sample data ----------
 const VENDORS = [
@@ -336,6 +339,20 @@ const VENDORS = [
   {id:'kuya-dodong', name:"Kuya Dodong's Fruit Stand", area:'Bankerohan', color:'#8A5A3B', init:'KD', status:'pending', since:'2026',
    story:"Applied last week. Sells mangosteen, lanzones and rambutan by the kilo at Bankerohan market.", contact:'0916 555 0120'},
 ];
+
+// Payouts already sent by the admin (earlier weeks). "prior" on each vendor = their sales before this week, so owed = this week's confirmed items.
+const PAYOUTS = [
+  {v:'tatay-ben',     when:'Oct 10', amt:5200, ref:'GC 9012 4471', note:'Oct 3 to 9'},
+  {v:'lola-nena',     when:'Oct 10', amt:4380, ref:'GC 9012 4472', note:'Oct 3 to 9'},
+  {v:'marilog-hills', when:'Oct 10', amt:1920, ref:'MY 7731 0082', note:'Oct 3 to 9'},
+  {v:'sinag-kape',    when:'Oct 10', amt:1650, ref:'GC 9012 4473', note:'Oct 3 to 9'},
+  {v:'tatay-ben',     when:'Oct 3',  amt:4100, ref:'GC 9011 8820', note:'Sept 26 to Oct 2'},
+  {v:'lola-nena',     when:'Oct 3',  amt:3950, ref:'GC 9011 8821', note:'Sept 26 to Oct 2'},
+  {v:'marilog-hills', when:'Oct 3',  amt:1440, ref:'MY 7730 9917', note:'Sept 26 to Oct 2'},
+  {v:'sinag-kape',    when:'Oct 3',  amt:1210, ref:'GC 9011 8822', note:'Sept 26 to Oct 2'},
+];
+const PRIOR = {'tatay-ben':9300, 'lola-nena':8330, 'marilog-hills':3360, 'sinag-kape':2860};
+const VCOLORS = ['#4E6E33','#B8731A','#7A4A8C','#3E5C7A','#8A5A3B','#A3452F','#2F6F6B','#6B5A9E'];
 
 const CATS = ['Fresh fruit','Sweets & candies','Pastries','Coffee & tablea'];
 
@@ -431,15 +448,29 @@ const S = {
   products: PRODUCTS.map(p=>({...p})),
   vendors: VENDORS.map(v=>({...v})),
   orders: ORDERS.map(o=>({...o, items:o.items.map(i=>({...i}))})),
+  payouts: PAYOUTS.map(x=>({...x})),
   filter: {cat:'All', q:''},
   checkout: {method:'pickup', pickup:PICKUPS[0], region:'Metro Manila', pay:'GCash', proof:null},
   lastOrder: null,
+  auth: null,              // null = not signed in; 'admin' | vendor id once signed in
   role: 'admin',           // 'admin' | vendor id
   dtab: 'overview',
   seq: 1043,
 };
+const MODE = window.DL_MODE || 'store';   // 'store' = public storefront, 'admin' = login-protected dashboard
 try{ const c = JSON.parse(localStorage.getItem('dl-cart')||'[]'); if(Array.isArray(c)) S.cart=c; }catch(e){}
 const saveCart = ()=>{ try{ localStorage.setItem('dl-cart', JSON.stringify(S.cart)); }catch(e){} };
+
+// ---------- Shared demo data (browser storage, shared by the store and /admin on the same domain) ----------
+const LS='dl-demo-v2';
+function loadState(){ try{ const j=JSON.parse(localStorage.getItem(LS)||'null'); if(j&&j.v===2){ S.products=j.products; S.vendors=j.vendors; S.orders=j.orders; S.payouts=j.payouts; S.seq=j.seq; return true; } }catch(e){} return false; }
+let lastSaved=null;
+function save(){ try{ const j=JSON.stringify({v:2, products:S.products, vendors:S.vendors, orders:S.orders, payouts:S.payouts, seq:S.seq}); if(j!==lastSaved){ localStorage.setItem(LS, j); lastSaved=j; } }catch(e){} }
+function resetDemo(){ try{ localStorage.removeItem(LS); localStorage.removeItem('dl-cart'); }catch(e){} location.hash=''; location.reload(); }
+loadState();
+window.addEventListener('storage', e=>{ if(e.key===LS && e.newValue!==lastSaved){ lastSaved=e.newValue; if(!e.newValue){ location.reload(); return; } loadState(); if(!$('#modal')) route(); } });
+// Shrink an uploaded photo before storing it, so browser storage does not fill up.
+function shrink(file, cb){ const rd=new FileReader(); rd.onload=()=>{ const img=new Image(); img.onload=()=>{ const max=900; const r=Math.min(1,max/Math.max(img.width,img.height)); const w=Math.round(img.width*r), h=Math.round(img.height*r); const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); cb(c.toDataURL('image/jpeg',0.8)); }; img.onerror=()=>cb(rd.result); img.src=rd.result; }; rd.readAsDataURL(file); }
 
 const $ = (s,el=document)=>el.querySelector(s);
 const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
@@ -447,12 +478,23 @@ const peso = n => '₱' + Number(n).toLocaleString('en-PH');
 const P = id => S.products.find(p=>p.id===id);
 const V = id => S.vendors.find(v=>v.id===id);
 const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pic = p => p.photo ? `<img src="${p.photo}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover;display:block">` : art(p.art);
 const stockLabel = p => p.stock===0 ? '<span class="stock out">Sold out</span>' : p.stock<=8 ? `<span class="stock low">Only ${p.stock} left</span>` : `<span class="stock">${p.stock} in stock</span>`;
 const pillStatus = s => `<span class="pill ${STATUS[s].c}"><span class="dot"></span>${STATUS[s].l}</span>`;
 const orderTotal = o => o.items.reduce((t,i)=>t + (P(i.id)?.price||0)*i.q, 0) + (o.fee||0);
+const CONFIRMED = ['paid','ready','shipped','completed'];
+const vendorItems = vid => { const rows=[]; S.orders.forEach(o=>{ if(!CONFIRMED.includes(o.status)) return; o.items.forEach(i=>{ const p=P(i.id); if(p&&p.v===vid) rows.push({o,p,q:i.q,amt:p.price*i.q}); }); }); return rows; };
+const vendorWeek = vid => vendorItems(vid).reduce((t,r)=>t+r.amt,0);
+const vendorEarned = vid => (PRIOR[vid]||0) + vendorWeek(vid);
+const vendorPaid = vid => S.payouts.filter(x=>x.v===vid).reduce((t,x)=>t+x.amt,0);
+const vendorOwed = vid => vendorEarned(vid)-vendorPaid(vid);
+const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'producer';
+const initials = s => s.split(/\s+/).filter(w=>/^[a-z]/i.test(w)).slice(0,2).map(w=>w[0].toUpperCase()).join('') || 'PR';
 const cartCount = ()=> S.cart.reduce((t,i)=>t+i.q,0);
 const cartSub = ()=> S.cart.reduce((t,i)=>t+P(i.id).price*i.q,0);
 const baseUrl = ()=> location.href.split('#')[0];
+const storeUrl = ()=> MODE==='admin' ? baseUrl().replace(/admin\/?(index\.html)?$/,'') : baseUrl();
+const STORE_CONTACT = {phone:'0917 555 0100', messenger:'m.me/durianlanedavao', whatsapp:'wa.me/639175550100'};
 
 let toastT; function toast(msg){ const r=$('#toastroot'); r.innerHTML=`<div class="toast">${esc(msg)}</div>`; clearTimeout(toastT); toastT=setTimeout(()=>r.innerHTML='',2200); }
 
@@ -479,12 +521,13 @@ const sampleProof = (()=>{ // a generated "screenshot" used for seeded orders
 
 // ---------- Router ----------
 function route(){
+  save();
+  const view=$('#view');
+  window.scrollTo({top:0});
+  if(MODE==='admin'){ view.innerHTML=vDash(); after('dash'); return; }
   const h = (location.hash||'#home').slice(1);
   const [r, ...rest] = h.split('-'); const id = rest.join('-');
-  window.scrollTo({top:0});
-  $$('#nav a').forEach(a=>a.classList.toggle('on', a.dataset.r===h || (h==='cart'&&false)));
-  $$('.demobar button').forEach(b=>b.classList.toggle('on', b.dataset.go===(h==='dash'?'dash':h==='qr'?'qr':'home')));
-  const view=$('#view');
+  $$('#nav a').forEach(a=>a.classList.toggle('on', a.dataset.r===h));
   if(h==='home') view.innerHTML=vHome();
   else if(h==='shop') view.innerHTML=vShop();
   else if(h==='producers') view.innerHTML=vProducers();
@@ -492,22 +535,21 @@ function route(){
   else if(r==='v') view.innerHTML=vVendor(id);
   else if(h==='cart') view.innerHTML=vCart();
   else if(h==='checkout') view.innerHTML=vCheckout();
-  else if(h==='order') view.innerHTML=vOrder();
-  else if(h==='dash') view.innerHTML=vDash();
-  else if(h==='qr') view.innerHTML=vQR();
+  else if(r==='order') view.innerHTML=vOrder(id);
   else view.innerHTML=vHome();
   after(h);
-  $('#cartcnt').textContent=cartCount();
+  const cc=$('#cartcnt'); if(cc) cc.textContent=cartCount();
 }
 window.addEventListener('hashchange', route);
-$('#cartbtn').onclick=()=>location.hash='cart';
-$$('.demobar button').forEach(b=>b.onclick=()=>location.hash=b.dataset.go);
+// "View the store" link on the dashboard: one folder up on the real domain, the store artifact on claude.ai
+const dbl=$('.dblink'); if(dbl){ dbl.href = /admin\/?(index\.html)?$/.test(baseUrl()) ? storeUrl() : 'https://claude.ai/artifact/UPuGiBY2pHYYJjBLJWKTEQ'; }
+const cb=$('#cartbtn'); if(cb) cb.onclick=()=>location.hash='cart';
 
 // ---------- Views: storefront ----------
 function cardHTML(p){
   const v=V(p.v);
   return `<a class="card" href="#p-${p.id}">
-    <div class="ph">${art(p.art)}${p.ship==='pickup'?'<span class="pill gold">Pickup only</span>':p.ship==='local'?'<span class="pill green">Davao only</span>':''}</div>
+    <div class="ph">${pic(p)}${p.ship==='pickup'?'<span class="pill gold">Pickup only</span>':p.ship==='local'?'<span class="pill green">Davao only</span>':''}</div>
     <div class="body"><span class="vend">${esc(v.name)} · ${esc(v.area)}</span><span class="name">${esc(p.name)}</span>
     <div class="row"><span class="price num">${peso(p.price)}</span>${stockLabel(p)}</div></div></a>`;
 }
@@ -545,11 +587,12 @@ function vShop(){
   <div class="grid">${list.map(cardHTML).join('')||'<div class="empty">No products match.</div>'}</div>`;
 }
 function vcardHTML(v){ const n=S.products.filter(p=>p.v===v.id).length;
-  return `<a class="vcard" href="#v-${v.id}"><div class="top"><span class="avatar" style="background:${v.color}">${v.init}</span><div><h3>${esc(v.name)}</h3><span class="small muted">${esc(v.area)} · ${n} products</span></div></div><p>${esc(v.story)}</p></a>`; }
+  return `<a class="vcard" href="#v-${v.id}"><div class="top"><span class="avatar" style="background:${v.color}${v.photo?`;background-image:url(${v.photo});background-size:cover`:''}">${v.photo?'':v.init}</span><div><h3>${esc(v.name)}</h3><span class="small muted">${esc(v.area)} · ${n} products</span></div></div><p>${esc(v.story)}</p></a>`; }
 function vProducers(){
   return `<div class="sechead"><div><h2>The producers</h2><p>Small family businesses around Davao City. Each one manages their own products through the dashboard.</p></div></div>
   <div class="vgrid">${S.vendors.filter(v=>v.status==='approved').map(vcardHTML).join('')}</div>
-  <div class="note green">Want to sell here? Producers apply with a photo of their product and a GCash or Maya number. The store admin approves in the dashboard.</div>`;
+  <section><div class="sechead"><div><h2>Want to sell here?</h2><p>Any Davao producer can apply. No fees to list; you only need a product and a GCash or Maya number.</p></div></div>
+  <div style="margin-top:14px;max-width:760px">${vendorFormHTML('apply')}</div></section>`;
 }
 function vProduct(id){
   const p=P(id); if(!p) return '<div class="empty">Product not found.</div>'; const v=V(p.v);
@@ -557,7 +600,7 @@ function vProduct(id){
   const more=S.products.filter(x=>x.v===p.v&&x.id!==id).slice(0,4);
   return `<div class="steps"><a href="#shop">Shop</a><i>/</i><span>${esc(p.cat)}</span><i>/</i><b>${esc(p.name)}</b></div>
   <div class="pdp">
-    <div class="ph">${art(p.art)}</div>
+    <div class="ph">${pic(p)}</div>
     <div class="info">
       <div><span class="eyebrow">${esc(v.name)} · ${esc(v.area)}</span><h1 style="font-size:clamp(24px,3.5vw,34px);margin-top:6px">${esc(p.name)}</h1></div>
       <div style="display:flex;gap:14px;align-items:baseline;flex-wrap:wrap"><span class="price num">${peso(p.price)}</span><span class="muted">${esc(p.unit)}</span>${stockLabel(p)}</div>
@@ -584,7 +627,7 @@ function vCart(){
   if(!S.cart.length) return `<div class="empty"><h2>Your cart is empty</h2><p>Durian candy is a good place to start.</p><a class="btn pri" href="#shop">Browse products</a></div>`;
   const vendors=[...new Set(S.cart.map(i=>P(i.id).v))];
   return `<div class="sechead"><div><h2>Your cart</h2><p>${cartCount()} items from ${vendors.length} producer${vendors.length>1?'s':''}. One payment covers all of them.</p></div></div>
-  <div class="two"><div class="cartlist">${S.cart.map(i=>{const p=P(i.id);return `<div class="citem"><div class="ph">${art(p.art)}</div><div><b>${esc(p.name)}</b><div class="small muted">${esc(V(p.v).name)} · ${peso(p.price)} ${esc(p.unit)}</div>
+  <div class="two"><div class="cartlist">${S.cart.map(i=>{const p=P(i.id);return `<div class="citem"><div class="ph">${pic(p)}</div><div><b>${esc(p.name)}</b><div class="small muted">${esc(V(p.v).name)} · ${peso(p.price)} ${esc(p.unit)}</div>
     <div class="ctl"><div class="qty"><button type="button" data-cq="-1" data-id="${p.id}">−</button><input value="${i.q}" readonly><button type="button" data-cq="1" data-id="${p.id}">+</button></div><button class="x" data-rm="${p.id}">Remove</button>${i.q>=p.stock?`<span class="small" style="color:var(--warn)">Max stock</span>`:''}</div></div>
     <b class="num">${peso(p.price*i.q)}</b></div>`}).join('')}</div>
   <div class="panel sticky"><h3>Summary</h3><div class="sum"><div><span>Subtotal</span><b class="num">${peso(cartSub())}</b></div><div><span>Shipping</span><span class="muted">chosen at checkout</span></div><div class="tot"><span>Total</span><span class="num">${peso(cartSub())}</span></div></div>
@@ -628,32 +671,54 @@ function placeOrder(){
   const o={code:'DL-'+(S.seq++), when:'Just now', buyer:$('#f-name').value||'Guest', phone:$('#f-phone').value||'', method:c.method,
     dest:c.method==='ship'?($('#f-addr')?.value||'')+' ('+c.region+')':c.pickup, fee, pay:c.pay, status:'pending', items:S.cart.map(i=>({...i})), proof:c.proof, placed:Date.now()};
   o.items.forEach(i=>{ P(i.id).stock=Math.max(0,P(i.id).stock-i.q); });
-  S.orders.unshift(o); S.lastOrder=o; S.cart=[]; saveCart(); S.checkout.proof=null;
-  location.hash='order';
+  S.orders.unshift(o); S.lastOrder=o; S.cart=[]; saveCart(); S.checkout.proof=null; save();
+  location.hash='order-'+o.code;
 }
-function vOrder(){
-  const o=S.lastOrder||S.orders[0]; const steps=o.method==='ship'?['Order placed','Payment confirmed','Packed and shipped','Delivered']:['Order placed','Payment confirmed','Ready for pickup','Picked up'];
+function vOrder(code){
+  const o=(code&&S.orders.find(x=>x.code===code.toUpperCase()))||S.lastOrder;
+  if(!o) return `<div class="empty"><h2>Order not found</h2><p>Check the code on your order QR, like DL-1043.</p><a class="btn pri" href="#shop">Back to shop</a></div>`;
+  const steps=o.method==='ship'?['Order placed','Payment confirmed','Packed and shipped','Delivered']:['Order placed','Payment confirmed','Ready for pickup','Picked up'];
   const idx={pending:0,paid:1,ready:2,shipped:2,completed:3,rejected:0}[o.status];
-  return `<div class="steps"><a href="#cart">Cart</a><i>/</i><a href="#checkout">Checkout</a><i>/</i><b>Order QR</b></div>
+  const track=storeUrl()+'#order-'+o.code;
+  return `<div class="steps"><a href="#shop">Shop</a><i>/</i><b>Order ${o.code}</b></div>
   <div class="ticket"><div class="qrtile" id="orderqr"></div><div style="display:grid;gap:10px;min-width:0">
-    <span class="eyebrow">Order ${o.code}</span><h2>Salamat, ${esc(o.buyer.split(' ')[0])}. Your order is in.</h2>
-    <p class="muted">${o.method==='pickup'?`Show this QR at <b>${esc(o.dest)}</b>. The producer scans it, hands over your items, and the order closes.`:`Ships via J&amp;T to <b>${esc(o.dest)}</b> once payment is confirmed. You will get the tracking number by SMS.`}</p>
+    <span class="eyebrow">Order ${o.code}</span><h2>${o.status==='pending'?`Salamat, ${esc(o.buyer.split(' ')[0])}. Your order is in.`:o.status==='rejected'?'We could not match your payment.':o.status==='completed'?'Picked up. Enjoy the durian!':'Payment confirmed. Preparing your order.'}</h2>
+    <p class="muted">${o.status==='rejected'?`${esc(o.reason||'The screenshot amount did not match the total.')} Message the store below and we will sort it out.`:o.method==='pickup'?`Show this QR at <b>${esc(o.dest)}</b>. The producer scans it, hands over your items, and the order closes.`:`Ships via J&amp;T to <b>${esc(o.dest)}</b> once payment is confirmed.${o.tracking?' Tracking: <code>'+esc(o.tracking)+'</code>':' You will get the tracking number by SMS.'}`}</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${pillStatus(o.status)}<span class="small muted">${o.pay} · ${peso(orderTotal(o))}</span></div>
     <div class="timeline">${steps.map((s,i)=>`<div class="${i<idx?'done':i===idx?'now':'todo'}"><span class="d"></span><span>${s}</span></div>`).join('')}</div>
-    <div class="btns"><a class="btn" href="#shop">Back to shop</a><a class="btn ghost" href="#dash">See it in the dashboard →</a></div></div></div>
-  <div class="panel"><h3>Items</h3><div class="sum">${o.items.map(i=>`<div><span>${i.q} × ${esc(P(i.id).name)}</span><span class="num">${peso(P(i.id).price*i.q)}</span></div>`).join('')}<div><span>${o.method==='ship'?'Shipping':'Pickup'}</span><span class="num">${o.fee?peso(o.fee):'Free'}</span></div><div class="tot"><span>Total</span><span class="num">${peso(orderTotal(o))}</span></div></div></div>`;
+    <div class="btns"><a class="btn" href="#shop">Back to shop</a></div></div></div>
+  <div class="two">
+    <div class="panel"><h3>Track this order</h3><p class="small muted">Save this link. Open it any time to see if your payment is confirmed or your parcel has shipped.</p><div class="copyrow"><code style="word-break:break-all;font-size:13px">${esc(track)}</code><button class="btn sm" type="button" data-copy="${esc(track)}">Copy link</button></div></div>
+    <div class="panel"><h3>Message the store</h3><p class="small muted">Questions about your order? Send the order code <b>${o.code}</b> with your message.</p>
+      <div class="copyrow"><span class="paylogo"><span class="sq" style="background:#0084FF"></span>Messenger</span><code>${STORE_CONTACT.messenger}</code><a class="btn sm" href="https://${STORE_CONTACT.messenger}">Open</a></div>
+      <div class="copyrow"><span class="paylogo"><span class="sq" style="background:#25D366"></span>WhatsApp</span><code>${STORE_CONTACT.whatsapp}</code><a class="btn sm" href="https://${STORE_CONTACT.whatsapp}">Open</a></div>
+      <div class="copyrow"><span class="paylogo"><span class="sq" style="background:#6F6355"></span>Text / call</span><code>${STORE_CONTACT.phone}</code><button class="btn sm" type="button" data-copy="${STORE_CONTACT.phone}">Copy</button></div>
+      <span class="small muted">Sample contacts. The real store uses the group's own Messenger page and number.</span></div>
+  </div>
+  <div class="panel"><h3>Items</h3><div class="sum">${o.items.map(i=>`<div><span>${i.q} × ${esc(P(i.id)?.name||i.id)}</span><span class="num">${peso((P(i.id)?.price||0)*i.q)}</span></div>`).join('')}<div><span>${o.method==='ship'?'Shipping':'Pickup'}</span><span class="num">${o.fee?peso(o.fee):'Free'}</span></div><div class="tot"><span>Total</span><span class="num">${peso(orderTotal(o))}</span></div></div></div>`;
 }
 
 // ---------- Dashboard ----------
 function myOrders(){ return S.role==='admin' ? S.orders : S.orders.filter(o=>o.items.some(i=>P(i.id).v===S.role)); }
 function myProducts(){ return S.role==='admin' ? S.products : S.products.filter(p=>p.v===S.role); }
+function vLogin(){
+  const accounts=[{id:'admin',name:'Store admin',sub:'Durian Lane Davao · sees everything',color:'#221A12',init:'DL'},...S.vendors.filter(v=>v.status==='approved').map(v=>({id:v.id,name:v.name,sub:v.area+' · sees only their own shelf',color:v.color,init:v.init}))];
+  return `<div style="max-width:620px;margin:20px auto;display:grid;gap:18px">
+    <div style="text-align:center;display:grid;gap:8px"><span class="eyebrow">Dashboard · sign in</span><h1 style="font-size:clamp(24px,4vw,36px)">Who is signing in?</h1><p class="muted">In the real store this is an email and password. In this demo, just pick an account; the password is already filled in.</p></div>
+    <div class="panel"><div class="field"><label>Account</label><div style="display:grid;gap:8px">${accounts.map(a=>`<button type="button" class="vendorbox" data-login="${a.id}" style="width:100%;text-align:left;cursor:pointer"><span class="avatar" style="background:${a.color}">${a.init}</span><div><b>${esc(a.name)}</b><div class="small muted">${esc(a.sub)}</div></div><span style="margin-left:auto" class="pill green">Sign in →</span></button>`).join('')}</div></div>
+    <div class="field"><label for="pw">Password</label><input id="pw" type="password" value="demo1234" readonly></div>
+    <span class="small muted">Producers get their login when the admin approves them. Forgot password works by SMS in the real build.</span></div>
+    <p class="small muted" style="text-align:center">Demo only: <button type="button" class="x" id="resetdemo" style="border:0;background:none;color:var(--bad);text-decoration:underline;cursor:pointer;font:inherit;font-size:13px">reset the sample data</button></p></div>`;
+}
 function vDash(){
+  if(!S.auth) return vLogin();
   const isAdmin=S.role==='admin'; const pend=myOrders().filter(o=>o.status==='pending').length; const low=myProducts().filter(p=>p.stock<=8).length; const vpend=S.vendors.filter(v=>v.status==='pending').length;
-  const tabs=[['overview','Overview'],['orders','Orders',pend],['products','Products & stock',low],...(isAdmin?[['vendors','Producers',vpend]]:[]),['pickup','Pickup scan']];
+  const owedN=isAdmin?S.vendors.filter(v=>v.status==='approved'&&vendorOwed(v.id)>0).length:0;
+  const tabs=[['overview','Overview'],['orders','Orders',pend],['products','Products & stock',low],...(isAdmin?[['vendors','Producers',vpend]]:[]),['payouts','Payouts',owedN],['pickup','Pickup scan'],['qrkit','QR kit']];
   return `<div class="dash"><aside class="side">
-    <div class="role"><span class="eyebrow">Signed in as</span><select id="role"><option value="admin" ${isAdmin?'selected':''}>Store admin (Durian Lane)</option>${S.vendors.filter(v=>v.status==='approved').map(v=>`<option value="${v.id}" ${S.role===v.id?'selected':''}>${esc(v.name)}</option>`).join('')}</select><span class="small muted">${isAdmin?'Sees every producer, confirms payments, approves new producers.':'Sees only their own products and orders.'}</span></div>
+    <div class="role"><span class="eyebrow">Signed in as</span><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:36px;height:36px;font-size:13px;background:${isAdmin?'#221A12':V(S.role).color}">${isAdmin?'DL':V(S.role).init}</span><b style="font-size:14px;line-height:1.2">${isAdmin?'Store admin':esc(V(S.role).name)}</b></div><span class="small muted">${isAdmin?'Sees every producer, confirms payments, approves new producers.':'Sees only their own products and orders.'}</span><button class="btn sm ghost" id="signout" type="button" style="justify-content:center">Sign out / switch account</button><button class="btn sm ghost danger" id="resetdemo" type="button" style="justify-content:center">Reset demo data</button></div>
     <div class="tabs">${tabs.map(([k,l,b])=>`<button data-tab="${k}" class="${S.dtab===k?'on':''}">${l}${b?`<span class="badge">${b}</span>`:''}</button>`).join('')}</div></aside>
-    <div class="dmain">${({overview:dOverview,orders:dOrders,products:dProducts,vendors:dVendors,pickup:dPickup}[S.dtab]||dOverview)()}</div></div>`;
+    <div class="dmain">${({overview:dOverview,orders:dOrders,products:dProducts,vendors:dVendors,payouts:dPayouts,pickup:dPickup,qrkit:vQR}[S.dtab]||dOverview)()}</div></div>`;
 }
 function dOverview(){
   const os=myOrders(); const today=os.filter(o=>o.when.startsWith('Oct 16')||o.when==='Just now');
@@ -667,6 +732,9 @@ function dOverview(){
     <div class="kpi ${pend.length?'alert':''}"><span class="l">Awaiting confirmation</span><span class="v num">${pend.length}</span><span class="s">screenshots to check</span></div>
     <div class="kpi"><span class="l">To prepare</span><span class="v num">${prep.length}</span><span class="s">paid, not yet packed</span></div>
     <div class="kpi ${low.length?'alert':''}"><span class="l">Low stock</span><span class="v num">${low.length}</span><span class="s">8 or fewer left</span></div>
+    ${S.role==='admin'
+      ?`<div class="kpi"><span class="l">Owed to producers</span><span class="v num">${peso(S.vendors.filter(v=>v.status==='approved').reduce((t,v)=>t+vendorOwed(v.id),0))}</span><span class="s">confirmed, not yet paid out</span></div>`
+      :`<div class="kpi"><span class="l">Owed to you</span><span class="v num">${peso(vendorOwed(S.role))}</span><span class="s">next payout Friday</span></div>`}
   </div>
   <div class="chart" id="chart"><div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px"><b>Sales, last 7 days</b><span class="small muted">Oct 10 to 16 · total ${peso(SALES7.reduce((t,s)=>t+s.v,0))}</span></div>
     <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily sales bar chart">${[0.5,1].map(f=>`<line x1="${pad}" x2="${W-pad}" y1="${H-30-f*(H-50)}" y2="${H-30-f*(H-50)}" stroke="var(--line)" stroke-dasharray="2 4"/>`).join('')}<line x1="${pad}" x2="${W-pad}" y1="${H-30}" y2="${H-30}" stroke="var(--line)"/>${bars}</svg></div>
@@ -682,15 +750,110 @@ function dOrders(){
 }
 function dProducts(){
   const ps=myProducts();
-  return `<div class="sechead"><div><h2>Products & stock</h2><p>Edit the number and press Save. Sold-out items stay visible but cannot be ordered.</p></div><button class="btn sm pri" id="addprod">+ Add product</button></div>
+  return `<div class="sechead"><div><h2>Products & stock</h2><p>Type a new quantity and press Save. Edit opens the full product. Sold-out items stay visible but cannot be ordered.</p></div><button class="btn sm pri" id="addprod">+ Add product</button></div>
   <div class="tblwrap"><table class="tbl"><thead><tr><th>Product</th>${S.role==='admin'?'<th>Producer</th>':''}<th>Category</th><th>Price</th><th>Stock</th><th>Delivery</th><th></th></tr></thead><tbody>
-  ${ps.map(p=>`<tr><td style="display:flex;gap:10px;align-items:center"><span class="thumb" style="display:grid;place-items:center;background:var(--surface-2)">${art(p.art)}</span><b>${esc(p.name)}</b></td>${S.role==='admin'?`<td>${esc(V(p.v).name)}</td>`:''}<td>${esc(p.cat)}</td><td class="num">${peso(p.price)}</td><td><input class="stk num" data-stk="${p.id}" value="${p.stock}" inputmode="numeric"> ${p.stock<=8?`<span class="pill ${p.stock===0?'bad':'warn'}">${p.stock===0?'out':'low'}</span>`:''}</td><td class="small">${SHIP[p.ship]}</td><td><button class="btn sm" data-save="${p.id}">Save</button></td></tr>`).join('')}</tbody></table></div>`;
+  ${ps.map(p=>`<tr><td style="display:flex;gap:10px;align-items:center"><span class="thumb" style="display:grid;place-items:center;background:var(--surface-2);overflow:hidden">${pic(p)}</span><b>${esc(p.name)}</b></td>${S.role==='admin'?`<td>${esc(V(p.v).name)}</td>`:''}<td>${esc(p.cat)}</td><td class="num">${peso(p.price)}</td><td><input class="stk num" data-stk="${p.id}" value="${p.stock}" inputmode="numeric"> ${p.stock<=8?`<span class="pill ${p.stock===0?'bad':'warn'}">${p.stock===0?'out':'low'}</span>`:''}</td><td class="small">${SHIP[p.ship]}</td><td class="acts"><button class="btn sm" data-save="${p.id}">Save</button><button class="btn sm ghost" data-edit="${p.id}">Edit</button></td></tr>`).join('')}</tbody></table></div>`;
 }
 function dVendors(){
-  return `<div class="sechead"><div><h2>Producers</h2><p>Each approved producer gets a login and their own shelf.</p></div></div>
+  return `<div class="sechead"><div><h2>Producers</h2><p>Each approved producer gets a login and their own shelf. Applications from the website land here as "Pending review".</p></div><button class="btn sm pri" id="addvendor">+ Add producer</button></div>
+  ${S.addVendor?vendorFormHTML('admin'):''}
   <div class="tblwrap"><table class="tbl"><thead><tr><th>Producer</th><th>Area</th><th>Products</th><th>Orders</th><th>Payout number</th><th>Status</th><th></th></tr></thead><tbody>
   ${S.vendors.map(v=>{const n=S.products.filter(p=>p.v===v.id).length;const o=S.orders.filter(x=>x.items.some(i=>P(i.id).v===v.id)).length;
     return `<tr><td style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:34px;height:34px;font-size:13px;background:${v.color}">${v.init}</span><b>${esc(v.name)}</b></td><td>${esc(v.area)}</td><td class="num">${n}</td><td class="num">${o}</td><td class="num">${esc(v.contact)}</td><td>${v.status==='approved'?'<span class="pill ok"><span class="dot"></span>Approved</span>':'<span class="pill warn"><span class="dot"></span>Pending review</span>'}</td><td class="acts">${v.status==='pending'?`<button class="btn sm pri" data-approve="${v.id}">Approve</button><button class="btn sm danger" data-decline="${v.id}">Decline</button>`:`<a class="btn sm" href="#v-${v.id}">View shelf</a>`}</td></tr>`}).join('')}</tbody></table></div>`;
+}
+function dPayouts(){
+  const isAdmin=S.role==='admin';
+  const vs=isAdmin?S.vendors.filter(v=>v.status==='approved'):[V(S.role)];
+  const hist=S.payouts.filter(x=>isAdmin||x.v===S.role);
+  const head=isAdmin
+    ?`<div class="sechead"><div><h2>Payouts</h2><p>Buyers pay the store's GCash or Maya. Every Friday the admin sends each producer their confirmed sales. Shipping fees are reimbursed separately to whoever shipped.</p></div></div>`
+    :`<div class="sechead"><div><h2>Your payouts</h2><p>What the store owes you from confirmed orders, and what has already been sent to ${esc(V(S.role).contact)}.</p></div></div>`;
+  const totalOwed=vs.reduce((t,v)=>t+vendorOwed(v.id),0);
+  const summary=isAdmin
+    ?`<div class="kpis"><div class="kpi ${totalOwed>0?'alert':''}"><span class="l">Owed now, all producers</span><span class="v num">${peso(totalOwed)}</span><span class="s">from ${vs.filter(v=>vendorOwed(v.id)>0).length} producers</span></div><div class="kpi"><span class="l">Paid out so far</span><span class="v num">${peso(hist.reduce((t,x)=>t+x.amt,0))}</span><span class="s">${hist.length} payouts</span></div><div class="kpi"><span class="l">Last payout run</span><span class="v">${hist[0]?.when||'none'}</span><span class="s">${hist[0]?hist.filter(x=>x.when===hist[0].when).length+' producers':''}</span></div></div>`
+    :`<div class="kpis"><div class="kpi ${vendorOwed(S.role)>0?'alert':''}"><span class="l">Owed to you</span><span class="v num">${peso(vendorOwed(S.role))}</span><span class="s">next payout Friday</span></div><div class="kpi"><span class="l">Last payout</span><span class="v num">${hist[0]?peso(hist[0].amt):'none'}</span><span class="s">${hist[0]?hist[0].when+' · ref '+hist[0].ref:''}</span></div><div class="kpi"><span class="l">Paid to you so far</span><span class="v num">${peso(vendorPaid(S.role))}</span><span class="s">${hist.length} payouts</span></div></div>`;
+  const table=`<div class="tblwrap"><table class="tbl"><thead><tr><th>Producer</th><th>This week, confirmed</th><th>Earned so far</th><th>Paid out</th><th>Owed</th><th>Send to</th><th></th></tr></thead><tbody>
+    ${vs.map(v=>{const owed=vendorOwed(v.id);return `<tr><td style="display:flex;gap:10px;align-items:center"><span class="avatar" style="width:34px;height:34px;font-size:13px;background:${v.color}">${v.init}</span><b>${esc(v.name)}</b></td><td class="num">${peso(vendorWeek(v.id))}<div class="small muted">${vendorItems(v.id).length} item lines</div></td><td class="num">${peso(vendorEarned(v.id))}</td><td class="num">${peso(vendorPaid(v.id))}</td><td class="num"><b style="color:${owed>0?'var(--warn)':'var(--ok)'}">${peso(owed)}</b></td><td class="num">${esc(v.contact)}</td><td class="acts">${isAdmin&&owed>0?`<button class="btn sm pri" data-payout="${v.id}">Mark paid</button>`:isAdmin?'<span class="pill ok"><span class="dot"></span>Settled</span>':`<button class="btn sm" data-breakdown="${v.id}">See orders</button>`}</td></tr>`}).join('')}
+    </tbody></table></div>`;
+  const breakdown=!isAdmin?`<div class="panel"><h3>Confirmed orders counted this week</h3>${vendorItems(S.role).length?`<div class="sum">${vendorItems(S.role).map(r=>`<div><span>${r.o.code} · ${r.q} × ${esc(r.p.name)} <span class="small muted">· ${STATUS[r.o.status].l}</span></span><span class="num">${peso(r.amt)}</span></div>`).join('')}<div class="tot"><span>Owed</span><span class="num">${peso(vendorOwed(S.role))}</span></div></div>`:'<span class="muted">Nothing confirmed yet this week.</span>'}<span class="small muted">Orders still "awaiting confirmation" are not counted until the screenshot is checked.</span></div>`:'';
+  const history=`<div class="sechead"><h3>Payout history</h3></div><div class="tblwrap"><table class="tbl"><thead><tr><th>Date</th>${isAdmin?'<th>Producer</th>':''}<th>Period</th><th>Amount</th><th>Reference</th></tr></thead><tbody>
+    ${hist.map(x=>`<tr><td>${esc(x.when)}</td>${isAdmin?`<td>${esc(V(x.v)?.name||x.v)}</td>`:''}<td class="small">${esc(x.note)}</td><td class="num"><b>${peso(x.amt)}</b></td><td class="num"><code>${esc(x.ref)}</code></td></tr>`).join('')||'<tr><td colspan="5" class="muted">No payouts yet.</td></tr>'}</tbody></table></div>`;
+  return head+summary+table+breakdown+history;
+}
+const ART_BY_CAT={'Fresh fruit':'durian','Sweets & candies':'candy','Pastries':'tart','Coffee & tablea':'coffee'};
+function openProductForm(id){
+  const p=id?P(id):null; const isAdmin=S.role==='admin';
+  const vid=p?p.v:(isAdmin?S.vendors.find(v=>v.status==='approved').id:S.role);
+  let photo=p?.photo||null;
+  $('#modalroot').innerHTML=`<div class="modal" id="modal"><div class="box" style="max-width:640px">
+    <div class="head"><div><span class="eyebrow">${p?'Edit product':'New product'}</span><h3>${p?esc(p.name):'Add a product to the shelf'}</h3></div><button class="close" type="button" aria-label="Close">×</button></div>
+    <div class="field"><label for="pf-name">Product name</label><input id="pf-name" value="${p?esc(p.name):''}" placeholder="e.g. Durian yema (12 pieces)"></div>
+    <div class="fr">
+      <div class="field"><label for="pf-vendor">Producer</label>${isAdmin?`<select id="pf-vendor">${S.vendors.filter(v=>v.status==='approved').map(v=>`<option value="${v.id}" ${v.id===vid?'selected':''}>${esc(v.name)}</option>`).join('')}</select>`:`<input id="pf-vendor" value="${esc(V(vid).name)}" readonly>`}</div>
+      <div class="field"><label for="pf-cat">Category</label><select id="pf-cat">${CATS.map(c=>`<option ${p&&p.cat===c?'selected':''}>${c}</option>`).join('')}</select></div>
+    </div>
+    <div class="fr">
+      <div class="field"><label for="pf-price">Price (₱)</label><input id="pf-price" inputmode="numeric" value="${p?p.price:''}" placeholder="150"></div>
+      <div class="field"><label for="pf-stock">Quantity in stock</label><input id="pf-stock" inputmode="numeric" value="${p?p.stock:''}" placeholder="24"></div>
+    </div>
+    <div class="fr">
+      <div class="field"><label for="pf-unit">Sold per</label><input id="pf-unit" value="${p?esc(p.unit):''}" placeholder="per pack, per kg, per jar"></div>
+      <div class="field"><label for="pf-ship">Delivery rule</label><select id="pf-ship">${Object.entries(SHIP).map(([k,l])=>`<option value="${k}" ${p&&p.ship===k?'selected':''}>${l}</option>`).join('')}</select></div>
+    </div>
+    <div class="field"><label for="pf-desc">Description</label><textarea id="pf-desc" rows="3" placeholder="What it is, how it tastes, how long it keeps.">${p?esc(p.desc):''}</textarea></div>
+    <div class="field"><label for="pf-photo">Photo</label><input id="pf-photo" type="file" accept="image/*"><div id="pf-preview">${photo?`<img src="${photo}" alt="" style="max-height:120px;border-radius:10px;border:1px solid var(--line)">`:'<span class="small muted">Optional. Without a photo the shop shows a drawing for the category.</span>'}</div></div>
+    <div id="pf-msg"></div>
+    <div class="btns"><button class="btn pri" id="pf-save" type="button">${p?'Save changes':'Add to shelf'}</button><button class="btn ghost close2" type="button">Cancel</button></div></div></div>`;
+  const m=$('#modal'); m.onclick=e=>{ if(e.target===m||e.target.closest('.close')||e.target.closest('.close2')) m.remove(); };
+  $('#pf-photo').onchange=e=>{ const f=e.target.files[0]; if(!f) return; shrink(f, d=>{ photo=d; $('#pf-preview').innerHTML=`<img src="${photo}" alt="" style="max-height:120px;border-radius:10px;border:1px solid var(--line)">`; }); };
+  $('#pf-save').onclick=()=>{
+    const name=$('#pf-name').value.trim(), price=parseInt($('#pf-price').value,10), stock=parseInt($('#pf-stock').value,10);
+    if(!name||isNaN(price)||isNaN(stock)){ $('#pf-msg').innerHTML='<div class="note red">Name, price and quantity are required.</div>'; return; }
+    const cat=$('#pf-cat').value, ship=$('#pf-ship').value, unit=$('#pf-unit').value.trim()||'per piece', desc=$('#pf-desc').value.trim();
+    const v=isAdmin?$('#pf-vendor').value:vid;
+    if(p){ Object.assign(p,{name,price,stock:Math.max(0,stock),cat,ship,unit,desc:desc||p.desc,v,photo}); if(!photo) p.art=ART_BY_CAT[cat]||'box'; toast(`${name} updated`); }
+    else { let nid=slug(name); if(P(nid)) nid+='-'+Date.now()%1000; S.products.push({id:nid,v,cat,name,price,stock:Math.max(0,stock),art:ART_BY_CAT[cat]||'box',ship,unit,desc:desc||'Freshly added to the shelf.',photo}); toast(`${name} added to the shelf`); }
+    m.remove(); route();
+  };
+  setTimeout(()=>$('#pf-name')?.focus(),50);
+}
+function openPayout(vid){
+  const v=V(vid); const owed=vendorOwed(vid); const rows=vendorItems(vid);
+  const ref=(v.contact.startsWith('092')||v.contact.startsWith('0920')?'MY ':'GC ')+'9012 '+String(4480+S.seq%500+rows.length);
+  $('#modalroot').innerHTML=`<div class="modal" id="modal"><div class="box">
+    <div class="head"><div><span class="eyebrow">Payout · ${esc(v.name)}</span><h3>Send ${peso(owed)} to ${esc(v.contact)}</h3></div><button class="close" type="button" aria-label="Close">×</button></div>
+    <div class="sum">${rows.map(r=>`<div><span>${r.o.code} · ${r.q} × ${esc(r.p.name)}</span><span class="num">${peso(r.amt)}</span></div>`).join('')}<div class="tot"><span>Total to send</span><span class="num">${peso(owed)}</span></div></div>
+    <div class="note">Send it from the store's GCash or Maya app first, then paste the reference number here so the producer can match it.</div>
+    <div class="field"><label for="payref">GCash / Maya reference number</label><input id="payref" value="${ref}"></div>
+    <div class="btns"><button class="btn pri" id="paydone">Mark as paid</button><button class="btn ghost close2">Cancel</button></div></div></div>`;
+  const m=$('#modal'); m.onclick=e=>{ if(e.target===m||e.target.closest('.close')||e.target.closest('.close2')) m.remove(); };
+  $('#paydone').onclick=()=>{ S.payouts.unshift({v:vid, when:'Just now', amt:owed, ref:$('#payref').value||ref, note:'Oct 10 to 16'}); m.remove(); toast(`${peso(owed)} marked paid to ${v.name}`); route(); };
+}
+function vendorFormHTML(mode){
+  const admin=mode==='admin';
+  return `<div class="panel" id="vform"><h3>${admin?'Add a producer':'Apply to sell here'}</h3>
+    <p class="small muted">${admin?'For a family you signed up in person. They are approved right away and get a login.':'Tell us about your products. The store admin reviews applications within a few days.'}</p>
+    <div class="fr"><div class="field"><label for="vf-name">Business or family name</label><input id="vf-name" placeholder="e.g. Nanay Cora's Suman"></div><div class="field"><label for="vf-area">Barangay or area</label><input id="vf-area" placeholder="e.g. Tugbok"></div></div>
+    <div class="field"><label for="vf-story">What you make, in a few lines</label><textarea id="vf-story" rows="3" placeholder="Suman sa lihiya and durian suman, cooked every morning…"></textarea></div>
+    <div class="fr"><div class="field"><label for="vf-contact">GCash or Maya number for payouts</label><input id="vf-contact" placeholder="09XX XXX XXXX" inputmode="numeric"></div><div class="field"><label for="vf-photo">Photo of your product (optional)</label><input id="vf-photo" type="file" accept="image/*"></div></div>
+    <div id="vf-preview"></div>
+    <div class="btns"><button class="btn pri" id="vf-submit" type="button">${admin?'Add producer':'Send application'}</button>${admin?'<button class="btn ghost" id="vf-cancel" type="button">Cancel</button>':''}</div>
+    <div id="vf-msg"></div></div>`;
+}
+function submitVendorForm(mode){
+  const name=$('#vf-name').value.trim(), area=$('#vf-area').value.trim(), story=$('#vf-story').value.trim(), contact=$('#vf-contact').value.trim();
+  const msg=$('#vf-msg');
+  if(!name||!contact){ msg.innerHTML='<div class="note red">Please fill in the name and the GCash or Maya number.</div>'; return; }
+  let id=slug(name); if(V(id)) id+='-'+Date.now()%1000;
+  const v={id, name, area:area||'Davao City', color:VCOLORS[S.vendors.length%VCOLORS.length], init:initials(name), status:mode==='admin'?'approved':'pending', since:'2026', story:story||'New producer. Story coming soon.', contact, photo:S.vphoto||null};
+  S.vendors.push(v); S.vphoto=null;
+  if(mode==='admin'){ toast(`${name} added and approved`); S.dtab='vendors'; route(); }
+  else { $('#vform').innerHTML=`<div class="note green" style="display:grid;gap:6px"><b>Application sent, salamat!</b><span>The admin will see ${esc(name)} under Producers → Pending review. In this demo, open the dashboard page and approve it yourself.</span></div><div class="btns" style="margin-top:12px"><a class="btn sm" href="admin/">Open the dashboard (admin only)</a></div>`; }
+}
+function wireVendorForm(mode){
+  const ph=$('#vf-photo'); if(ph) ph.onchange=e=>{ const f=e.target.files[0]; if(!f) return; shrink(f, d=>{ S.vphoto=d; $('#vf-preview').innerHTML=`<img src="${d}" alt="Product photo" style="max-height:120px;border-radius:10px;border:1px solid var(--line)">`; }); };
+  $('#vf-submit').onclick=()=>submitVendorForm(mode);
+  const c=$('#vf-cancel'); if(c) c.onclick=()=>{ S.addVendor=false; route(); };
 }
 function dPickup(){
   const ready=myOrders().filter(o=>o.status==='ready');
@@ -720,17 +883,19 @@ function openOrder(code){
 
 // ---------- QR kit ----------
 function vQR(){
-  const base=baseUrl();
-  return `<div class="sechead"><div><h2>QR kit</h2><p>Everything printable for the booth, the product tags and the checkout. All generated from the store's own links.</p></div></div>
-  <div class="qrbig"><div class="qrtile" id="qr-booth"></div><div style="display:grid;gap:8px"><span class="eyebrow">Booth sign</span><h3>Scan to shop Durian Lane</h3><p class="muted">Opens the store on the buyer's phone. Print this on the Kadayawan booth banner and the producer's stall.</p><div class="copyrow"><code style="word-break:break-all">${esc(base)}</code></div></div></div>
-  <div class="qrbig"><div class="qrtile" id="qr-pay"></div><div style="display:grid;gap:8px"><span class="eyebrow">Checkout</span><h3>Payment QR (GCash / Maya)</h3><p class="muted">One store QR, printed at the booth and shown on the checkout page. Buyers type the total themselves and upload the screenshot. Later, a PayMongo link can make a per-order QR with the exact amount.</p></div></div>
-  <div class="sechead"><h3>Product tag QRs</h3><p class="small muted">Stick one on each item at the fair. Buyers who do not want to carry a durian home can scan and order delivery.</p></div>
-  <div class="qrgrid">${S.products.filter(p=>p.stock>0).map(p=>`<div class="qrcard"><div class="qrtile" data-pq="${p.id}"></div><b>${esc(p.name)}</b><span>${peso(p.price)} · ${esc(V(p.v).name)}</span></div>`).join('')}</div>`;
+  const base=storeUrl(); const ps=myProducts().filter(p=>p.stock>0);
+  return `<div class="sechead"><div><h2>QR kit</h2><p>Everything printable for the booth, the product tags and the checkout. All generated from the store's own link, so they never go stale.</p></div></div>
+  <div class="qrbig"><div class="qrtile" id="qr-booth"></div><div style="display:grid;gap:8px"><span class="eyebrow">Booth sign</span><h3>Scan to shop Durian Lane</h3><p class="muted">Opens the store on the buyer's phone. Print this on the booth banner and each producer's stall.</p><div class="copyrow"><code style="word-break:break-all">${esc(base)}</code></div></div></div>
+  ${S.role==='admin'?`<div class="qrbig"><div class="qrtile" id="qr-pay"></div><div style="display:grid;gap:8px"><span class="eyebrow">Checkout</span><h3>Payment QR (GCash / Maya)</h3><p class="muted">One store QR, printed at the booth and shown on the checkout page. Buyers type the total themselves and upload the screenshot. Later, a PayMongo link can make a per-order QR with the exact amount.</p></div></div>`:'<div style="display:none" id="qr-pay"></div>'}
+  <div class="sechead"><h3>Product tag QRs${S.role==='admin'?'':' · your products'}</h3><p class="small muted">Stick one on each item at the fair. Buyers who do not want to carry a durian home can scan and order delivery.</p></div>
+  <div class="qrgrid">${ps.map(p=>`<div class="qrcard"><div class="qrtile" data-pq="${p.id}"></div><b>${esc(p.name)}</b><span>${peso(p.price)} · ${esc(V(p.v).name)}</span></div>`).join('')}</div>`;
 }
 
 // ---------- Post-render wiring ----------
 function after(h){
   const view=$('#view');
+  $$('[data-copy]').forEach(b=>b.onclick=()=>{ const t=b.dataset.copy; (navigator.clipboard?.writeText(t)||Promise.reject()).then(()=>toast('Copied')).catch(()=>{ const r=document.createRange(); const c=b.parentElement.querySelector('code'); if(c){ r.selectNodeContents(c); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); } toast(t); }); });
+  if(h==='producers'){ wireVendorForm('apply'); }
   if(h==='shop'){ $('#shopq').oninput=e=>{S.filter.q=e.target.value; const pos=e.target.selectionStart; route(); const q=$('#shopq'); q.focus(); q.setSelectionRange(pos,pos);}; $$('[data-cat]').forEach(b=>b.onclick=()=>{S.filter.cat=b.dataset.cat; route();}); }
   if(h.startsWith('p-')){ const p=P(h.slice(2)); const inp=$('#pq');
     $$('[data-q]').forEach(b=>b.onclick=()=>{ inp.value=Math.min(p.stock,Math.max(1,(+inp.value||1)+(+b.dataset.q))); });
@@ -741,21 +906,28 @@ function after(h){
     $$('input[name=m]').forEach(r=>r.onchange=()=>{c.method=r.value; route();});
     const fp=$('#f-pickup'); if(fp) fp.onchange=()=>c.pickup=fp.value; const fr=$('#f-region'); if(fr) fr.onchange=()=>{c.region=fr.value; route();};
     $$('[data-pay]').forEach(b=>b.onclick=()=>{c.pay=b.dataset.pay; route();});
-    $$('[data-copy]').forEach(b=>b.onclick=()=>{ navigator.clipboard?.writeText(b.dataset.copy).then(()=>toast('Number copied')).catch(()=>toast(b.dataset.copy)); });
-    $('#f-proof').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const rd=new FileReader(); rd.onload=()=>{c.proof=rd.result; route();}; rd.readAsDataURL(f); };
+    $('#f-proof').onchange=e=>{ const f=e.target.files[0]; if(!f) return; shrink(f, d=>{ c.proof=d; route(); }); };
     $('#useSample').onclick=()=>{ c.proof=sampleProof(total,c.pay); route(); };
     const pl=$('#place'); if(pl) pl.onclick=placeOrder; }
-  if(h==='order'){ const o=S.lastOrder||S.orders[0]; qr($('#orderqr'), `DURIANLANE|${o.code}|${orderTotal(o)}`, 150); }
-  if(h==='qr'){ qr($('#qr-booth'), baseUrl(), 150); qr($('#qr-pay'), '00020101021128GCSHDURIANLANE09175550100 5802PH5917Durian Lane Davao6304DEMO', 150); $$('[data-pq]').forEach(el=>qr(el, baseUrl()+'#p-'+el.dataset.pq, 110)); }
+  if(h.startsWith('order')){ const el=$('#orderqr'); const code=h.slice(6); const o=(code&&S.orders.find(x=>x.code===code.toUpperCase()))||S.lastOrder; if(el&&o) qr(el, `DURIANLANE|${o.code}|${orderTotal(o)}`, 150); }
   if(h==='dash'){
-    $('#role').onchange=e=>{S.role=e.target.value; if(S.role!=='admin'&&S.dtab==='vendors') S.dtab='overview'; route();};
+    $$('[data-login]').forEach(b=>b.onclick=()=>{ S.auth=b.dataset.login; S.role=S.auth; S.dtab='overview'; S.addVendor=false; toast(`Signed in as ${S.role==='admin'?'Store admin':V(S.role).name}`); route(); });
+    const so=$('#signout'); if(so) so.onclick=()=>{ S.auth=null; route(); };
+    const rd=$('#resetdemo'); if(rd) rd.onclick=()=>{ if(rd.dataset.armed){ resetDemo(); return; } rd.dataset.armed='1'; rd.textContent='Click again to reset'; setTimeout(()=>{ rd.dataset.armed=''; rd.textContent=rd.id==='resetdemo'&&rd.classList.contains('btn')?'Reset demo data':'reset the sample data'; },3000); };
+    if(!S.auth) return;
+    if(S.dtab==='qrkit'){ qr($('#qr-booth'), storeUrl(), 150); qr($('#qr-pay'), '00020101021128GCSHDURIANLANE09175550100 5802PH5917Durian Lane Davao6304DEMO', 150); $$('[data-pq]').forEach(el=>qr(el, storeUrl()+'#p-'+el.dataset.pq, 110)); }
     $$('[data-tab]').forEach(b=>b.onclick=()=>{S.dtab=b.dataset.tab; route();});
     $$('[data-gotab]').forEach(b=>b.onclick=()=>{S.dtab=b.dataset.gotab; route();});
     $$('[data-open]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); openOrder(b.dataset.open); });
     $$('[data-save]').forEach(b=>b.onclick=()=>{ const p=P(b.dataset.save); const v=parseInt($(`[data-stk="${p.id}"]`).value,10); if(isNaN(v)||v<0) return toast('Enter a number'); p.stock=v; toast(`${p.name.split(' (')[0]}: ${v} in stock`); route(); });
+    const av=$('#addvendor'); if(av) av.onclick=()=>{ S.addVendor=!S.addVendor; route(); if(S.addVendor){ const n=$('#vf-name'); if(n) n.focus(); } };
+    if(S.dtab==='vendors'&&S.addVendor) wireVendorForm('admin');
+    $$('[data-payout]').forEach(b=>b.onclick=()=>openPayout(b.dataset.payout));
+    $$('[data-breakdown]').forEach(b=>b.onclick=()=>{ const el=document.querySelector('.panel h3'); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); });
     $$('[data-approve]').forEach(b=>b.onclick=()=>{ V(b.dataset.approve).status='approved'; toast('Producer approved. They can now log in and add products.'); route(); });
     $$('[data-decline]').forEach(b=>b.onclick=()=>{ S.vendors=S.vendors.filter(v=>v.id!==b.dataset.decline); toast('Application declined'); route(); });
-    const ap=$('#addprod'); if(ap) ap.onclick=()=>{ const vid=S.role==='admin'?'lola-nena':S.role; const id='new-'+Date.now(); S.products.push({id, v:vid, cat:'Sweets & candies', name:'Durian yema (12 pieces)', price:110, stock:24, art:'candy', ship:'national', desc:'Just added from the dashboard. Edit the details any time.', unit:'per pack'}); toast('Product added to the shelf'); route(); };
+    const ap=$('#addprod'); if(ap) ap.onclick=()=>openProductForm(null);
+    $$('[data-edit]').forEach(b=>b.onclick=()=>openProductForm(b.dataset.edit));
     const sb=$('#scanbtn'); const doScan=code=>{ const o=S.orders.find(x=>x.code===code.trim().toUpperCase()); const r=$('#scanres'); if(!o){ r.innerHTML='<span class="note red" style="display:block">No order with that code.</span>'; return; }
       r.innerHTML=`<div class="panel" style="padding:14px"><b>${o.code}</b> · ${esc(o.buyer)} ${pillStatus(o.status)}<div class="small">${o.items.map(i=>`${i.q}× ${esc(P(i.id).name)}`).join('<br>')}</div>${o.status==='ready'?`<button class="btn pri sm" id="handover">Hand over and close order</button>`:o.status==='pending'?'<span class="note">Payment not confirmed yet. Do not release.</span>':o.status==='completed'?'<span class="note green">Already picked up.</span>':'<span class="note">Not ready for pickup.</span>'}</div>`;
       const ho=$('#handover'); if(ho) ho.onclick=()=>{ o.status='completed'; toast(o.code+' picked up'); route(); }; };
@@ -789,7 +961,8 @@ function reply(t){
   if(has('magkano','price','how much','presyo','cost')) { const found=S.products.filter(p=>p.name.toLowerCase().split(' ').some(w=>w.length>4&&s.includes(w.replace(/[,()]/g,'')))); if(found.length) return found.map(p=>`${esc(p.name)} is ${peso(p.price)} ${esc(p.unit)}.${plink(p.id)}`).join('<br>'); return `Prices run from ₱120 (pastillas) to ₱850 (whole cheesecake). Tell me the product and I will check.`; }
   if(has('smell','amoy','mild','first time','beginner')) return `If you are new to durian, start with pastillas or the chips. Both are mild. The candy and jam are a step up. Fresh fruit is for the brave.${plink('durian-pastillas')}${plink('durian-chips')}`;
   if(has('cake','cheesecake','tart','order ahead','advance')) return `The cheesecake is pickup only and needs 2 days' notice; the tarts ship fine for 3 days in the box.${plink('durian-cheesecake')}${plink('durian-tart')}`;
-  if(has('sell','vendor','producer','join','apply','magbenta')) return `Producers can apply with a product photo and a GCash or Maya number. The store admin reviews it in the dashboard, and once approved you get your own login to add products and manage stock.`;
+  if(has('sell','vendor','producer','join','apply','magbenta')) return `Producers can apply right on the site: go to <a href="#producers">Producers</a> and fill in the short form (name, what you make, a photo, your GCash or Maya number). The store admin reviews it, and once approved you get your own login to add products and manage stock. Payouts are sent every Friday.`;
+  if(has('payout','bayaran','hatian','commission','share','owed')) return `Buyers pay the store's own GCash or Maya QR. Every Friday the admin sends each producer their confirmed sales for the week, with the reference number logged in the dashboard. No commission is taken by the website.`;
   if(has('season','when','kailan','august')) return `Durian season in Davao runs August to October. Mangosteen is done for the year. Off-season, Tatay Ben sells frozen pulp and pomelo.`;
   if(has('thank','salamat')) return `Walang anuman! Enjoy the durian.`;
   return `I can answer about shipping, pickup, payment, stock, and which durian products to pick. Try "pasalubong under 500" or "do you ship to Cebu".`;
@@ -799,10 +972,12 @@ function chatOpen(v){ $('#chat').hidden=!v; $('#chatfab').hidden=v; if(v&&!$('#c
 function bot(html){ const l=$('#chatlog'); const d=document.createElement('div'); d.className='msg bot'; d.innerHTML=html; l.appendChild(d); l.scrollTop=l.scrollHeight; }
 function send(t){ if(!t.trim()) return; const l=$('#chatlog'); const d=document.createElement('div'); d.className='msg me'; d.textContent=t; l.appendChild(d); const ty=document.createElement('div'); ty.className='msg bot typing'; ty.innerHTML='<span></span><span></span><span></span>'; l.appendChild(ty); l.scrollTop=l.scrollHeight;
   setTimeout(()=>{ ty.remove(); bot(reply(t)); }, 500); }
+if($('#chatfab')){
 $('#chatfab').onclick=()=>chatOpen(true); $('#chatclose').onclick=()=>chatOpen(false);
 $('#chatform').onsubmit=e=>{ e.preventDefault(); const i=$('#chatin'); send(i.value); i.value=''; };
 $('#chatquick').innerHTML=QUICK.map(q=>`<button type="button">${q}</button>`).join(''); $$('#chatquick button').forEach(b=>b.onclick=()=>send(b.textContent));
 $('#chatlog').addEventListener('click',e=>{ if(e.target.closest('a')) chatOpen(false); });
+}
 
 route();
 </script>
